@@ -34,7 +34,7 @@ export default function ProductDetailPage() {
         if (err instanceof Error && err.name === 'AbortError') return;
         setError('Product not found.');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     }
 
@@ -46,8 +46,47 @@ export default function ProductDetailPage() {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
         <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
-        <div style={centerStyle}>
-          <div style={spinnerStyle} />
+        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
+          <div className="shimmer" style={{ height: '36px', width: '80px', borderRadius: '6px' }} />
+          <div style={{ display: 'flex', gap: '40px', marginTop: '20px', backgroundColor: '#fff', borderRadius: '12px', padding: '32px', flexWrap: 'wrap' }}>
+            {/* Left column skeleton */}
+            <div style={{ flex: '0 0 360px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="shimmer" style={{ width: '100%', aspectRatio: '1', borderRadius: '8px' }} />
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="shimmer" style={{ width: '60px', height: '60px', borderRadius: '6px', flexShrink: 0 }} />
+                ))}
+              </div>
+            </div>
+            {/* Right column skeleton */}
+            <div style={{ flex: 1, minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="shimmer" style={{ height: '32px', width: '60%' }} />
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <div className="shimmer" style={{ height: '36px', width: '80px' }} />
+                <div className="shimmer" style={{ height: '20px', width: '120px' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="shimmer" style={{ height: '14px', width: '40%' }} />
+                <div className="shimmer" style={{ height: '14px', width: '35%' }} />
+                <div className="shimmer" style={{ height: '14px', width: '30%' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="shimmer" style={{ height: '18px', width: '30%' }} />
+                <div className="shimmer" style={{ height: '14px', width: '100%' }} />
+                <div className="shimmer" style={{ height: '14px', width: '90%' }} />
+                <div className="shimmer" style={{ height: '14px', width: '80%' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="shimmer" style={{ height: '18px', width: '25%' }} />
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} style={{ padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div className="shimmer" style={{ height: '14px', width: '40%' }} />
+                    <div className="shimmer" style={{ height: '12px', width: '90%' }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -57,7 +96,7 @@ export default function ProductDetailPage() {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
         <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
-        <div style={centerStyle}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' }}>
           <p style={{ color: '#dc2626', fontWeight: 600 }}>{error ?? 'Product not found.'}</p>
           <button onClick={() => navigate('/')} style={backBtnStyle}>← Back to Products</button>
         </div>
@@ -76,11 +115,13 @@ export default function ProductDetailPage() {
 
           {/* Images */}
           <div style={{ flex: '0 0 360px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ width: '100%', aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
+            <div style={{ width: '100%', aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', position: 'relative' }}>
+              {!imgLoaded && <div className="shimmer" style={{ position: 'absolute', inset: 0 }} />}
               <img
                 src={selectedImage}
                 alt={product.title}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                onLoad={() => setImgLoaded(true)}
+                style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
               />
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -182,8 +223,6 @@ export default function ProductDetailPage() {
   );
 }
 
-const centerStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' };
-const spinnerStyle: React.CSSProperties = { width: '36px', height: '36px', border: '4px solid #e5e7eb', borderTop: '4px solid #2563eb', borderRadius: '50%', animation: 'spin 0.8s linear infinite' };
 const backBtnStyle: React.CSSProperties = { padding: '8px 16px', backgroundColor: '#fff', border: '1px solid #d1d5db', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 };
 const navBtnStyle = (disabled: boolean, active = false): React.CSSProperties => ({
   padding: '6px 10px',

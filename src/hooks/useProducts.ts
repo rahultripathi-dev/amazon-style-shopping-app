@@ -71,7 +71,7 @@ export function useProducts(filters: Filters, page: number): UseProductsResult {
         if (err instanceof Error && err.name === 'AbortError') return;
         setError('Something went wrong. Please try again.');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     }
 
