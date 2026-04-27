@@ -12,7 +12,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pr
   const pages = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', padding: '24px 0' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', padding: '24px 0', marginTop:"48px" }}>
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
