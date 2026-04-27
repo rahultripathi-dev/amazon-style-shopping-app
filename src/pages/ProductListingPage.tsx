@@ -12,14 +12,17 @@ export default function ProductListingPage() {
     const [showFilters, setShowFilters] = useState(true)
   const { filters, setFilters, page, setPage, productIds, setProductIds, setTotalPages } = useFilterContext();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { products, totalPages, loading, error, allBrands } = useProducts(filters, page);
 
   useEffect(() => {
     const controller = new AbortController();
+    setCategoriesLoading(true);
     fetchCategories(controller.signal)
       .then(setCategories)
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setCategoriesLoading(false));
     return () => controller.abort();
   }, []);
 
@@ -61,6 +64,7 @@ export default function ProductListingPage() {
             onReset={handleReset}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            categoriesLoading={categoriesLoading}
           />
         )}
 

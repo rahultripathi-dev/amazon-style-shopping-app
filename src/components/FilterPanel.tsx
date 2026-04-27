@@ -9,9 +9,10 @@ interface Props {
   onReset: () => void;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  categoriesLoading: boolean;
 }
 
-export default function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset, searchQuery, onSearchChange }: Props) {
+export default function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset, searchQuery, onSearchChange, categoriesLoading }: Props) {
   const [minInput, setMinInput] = useState(filters.minPrice);
   const [maxInput, setMaxInput] = useState(filters.maxPrice);
 
@@ -57,16 +58,21 @@ export default function FilterPanel({ categories, allBrands, filters, onFilterCh
       <section>
         <p style={sectionHeadStyle}>Category</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {categories.map(cat => (
-            <label key={cat.slug} style={labelStyle}>
-              <input
-                type="checkbox"
-                checked={filters.category === cat.slug}
-                onChange={() => handleCategoryChange(cat.slug)}
-              />
-              {cat.name}
-            </label>
-          ))}
+          {categoriesLoading
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="shimmer" style={{ height: '16px', width: `${60 + (i % 3) * 15}%`, borderRadius: '4px' }} />
+              ))
+            : categories.map(cat => (
+                <label key={cat.slug} style={labelStyle}>
+                  <input
+                    type="checkbox"
+                    checked={filters.category === cat.slug}
+                    onChange={() => handleCategoryChange(cat.slug)}
+                  />
+                  {cat.name}
+                </label>
+              ))
+          }
         </div>
       </section>
 

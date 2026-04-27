@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
 import StarRating from './StarRating';
@@ -9,6 +9,7 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   const navigate = useNavigate();
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
     <div
@@ -27,11 +28,13 @@ export default function ProductCard({ product }: Props) {
       onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)')}
       onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}
     >
-      <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', borderRadius: '6px', backgroundColor: '#f9fafb' }}>
+      <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', borderRadius: '6px', backgroundColor: '#f9fafb', position: 'relative' }}>
+        {!imgLoaded && <div className="shimmer" style={{ position: 'absolute', inset: 0, borderRadius: '6px' }} />}
         <img
           src={product.thumbnail}
           alt={product.title}
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          onLoad={() => setImgLoaded(true)}
+          style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
           loading="lazy"
         />
       </div>

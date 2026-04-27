@@ -17,6 +17,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     if (!id) return;
