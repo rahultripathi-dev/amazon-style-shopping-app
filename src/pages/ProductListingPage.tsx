@@ -7,7 +7,6 @@ import ProductGrid from '../components/ProductGrid';
 import Pagination from '../components/Pagination';
 import Header from '../components/Header';
 import type { Category, Filters } from '../types';
-import styles from './ProductListingPage.module.css';
 
 export default function ProductListingPage() {
   const [showFilters, setShowFilters] = useState(true);
@@ -51,28 +50,30 @@ export default function ProductListingPage() {
   [products, searchQuery]);
 
   return (
-    <div className={styles.page}>
+    <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onMenuToggle={handleMenuToggle} />
 
-      <div className={styles.container}>
-        <div className={styles.layout}>
-          {showFilters && (
-            <FilterPanel
-              categories={categories}
-              allBrands={allBrands}
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onReset={handleReset}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              categoriesLoading={categoriesLoading}
-            />
-          )}
+      <div className="flex-1 overflow-hidden">
+        <div className="max-w-300 mx-auto h-full px-4 py-6 flex flex-col">
+          <div className="flex gap-6 flex-1 min-h-0">
+            {showFilters && (
+              <FilterPanel
+                categories={categories}
+                allBrands={allBrands}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onReset={handleReset}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                categoriesLoading={categoriesLoading}
+              />
+            )}
 
-          <div className={styles.main}>
-            <p className={styles.sectionTitle}>🔍 Filters</p>
-            <ProductGrid products={visibleProducts} loading={loading} error={error} />
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            <div className="flex-1 flex flex-col min-h-0">
+              <p className="m-0 mb-3 font-bold text-base flex items-center gap-1.5">🔍 Filters</p>
+              <ProductGrid products={visibleProducts} loading={loading} error={error} />
+              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            </div>
           </div>
         </div>
       </div>

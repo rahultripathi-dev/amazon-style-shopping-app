@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './StarRating.module.css';
 
 interface Props {
   rating: number;
@@ -14,17 +13,17 @@ const StarRating = React.memo(function StarRating({ rating, count }: Props) {
   });
 
   return (
-    <span className={styles.wrap}>
+    <span className="inline-flex items-center gap-0.5">
       {stars.map((star, i) => (
         <span
           key={i}
-          className={`${styles.star} ${star.filled || star.half ? styles.starFilled : styles.starEmpty}`}
+          className={`text-sm ${star.filled || star.half ? 'text-[#f5a623]' : 'text-gray-300'}`}
         >
           {star.filled ? '★' : star.half ? '⯨' : '☆'}
         </span>
       ))}
       {count !== undefined && (
-        <span className={styles.count}>({rating.toFixed(1)})</span>
+        <span className="text-xs text-gray-500 ml-0.5">({rating.toFixed(1)})</span>
       )}
     </span>
   );

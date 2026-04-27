@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Pagination.module.css';
 
 interface Props {
   currentPage: number;
@@ -14,29 +13,33 @@ function getPageNumbers(current: number, total: number): (number | '...')[] {
   return [1, '...', current - 1, current, current + 1, '...', total];
 }
 
+const btnBase = 'px-3 py-1.5 rounded-md border cursor-pointer text-sm [&:hover:not(:disabled)]:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed disabled:opacity-60';
+const btnDefault = 'bg-white text-gray-900 font-normal border-gray-200';
+const btnActive = 'bg-blue-600 text-white font-semibold border-blue-600';
+
 const Pagination = React.memo(function Pagination({ currentPage, totalPages, onPageChange }: Props) {
   if (totalPages <= 1) return null;
 
   const pages = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div className={styles.pagination}>
+    <div className="flex justify-center items-center gap-1.5 py-6 mt-12">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={styles.btn}
+        className={`${btnBase} ${btnDefault}`}
       >
         ← Prev
       </button>
 
       {pages.map((p, i) =>
         p === '...' ? (
-          <span key={`ellipsis-${i}`} className={styles.ellipsis}>...</span>
+          <span key={`ellipsis-${i}`} className="px-1 text-gray-500">...</span>
         ) : (
           <button
             key={p}
             onClick={() => onPageChange(p as number)}
-            className={`${styles.btn} ${p === currentPage ? styles.btnActive : ''}`}
+            className={`${btnBase} ${p === currentPage ? btnActive : btnDefault}`}
           >
             {p}
           </button>
@@ -46,7 +49,7 @@ const Pagination = React.memo(function Pagination({ currentPage, totalPages, onP
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={styles.btn}
+        className={`${btnBase} ${btnDefault}`}
       >
         Next →
       </button>
