@@ -8,7 +8,7 @@ interface Props {
   error: string | null;
 }
 
-export default function ProductGrid({ products, loading, error }: Props) {
+const ProductGrid = React.memo(function ProductGrid({ products, loading, error }: Props) {
   if (loading) {
     return (
       <div style={{
@@ -59,7 +59,9 @@ export default function ProductGrid({ products, loading, error }: Props) {
       ))}
     </div>
   );
-}
+});
+
+export default ProductGrid;
 
 const centerStyle: React.CSSProperties = {
   flex: 1,

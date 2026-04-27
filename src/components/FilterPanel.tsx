@@ -12,7 +12,7 @@ interface Props {
   categoriesLoading: boolean;
 }
 
-export default function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset, searchQuery, onSearchChange, categoriesLoading }: Props) {
+const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset, searchQuery, onSearchChange, categoriesLoading }: Props) {
   const [minInput, setMinInput] = useState(filters.minPrice);
   const [maxInput, setMaxInput] = useState(filters.maxPrice);
 
@@ -121,7 +121,9 @@ export default function FilterPanel({ categories, allBrands, filters, onFilterCh
 
     </aside>
   );
-}
+});
+
+export default FilterPanel;
 
 const sectionHeadStyle: React.CSSProperties = { margin: '0 0 10px 0', fontWeight: 600, fontSize: '14px', color: '#374151' };
 const labelStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer', color: '#374151' };

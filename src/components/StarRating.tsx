@@ -5,7 +5,7 @@ interface Props {
   count?: number;
 }
 
-export default function StarRating({ rating, count }: Props) {
+const StarRating = React.memo(function StarRating({ rating, count }: Props) {
   const stars = Array.from({ length: 5 }, (_, i) => {
     const filled = i + 1 <= Math.floor(rating);
     const half = !filled && i < rating;
@@ -32,4 +32,6 @@ export default function StarRating({ rating, count }: Props) {
       )}
     </span>
   );
-}
+});
+
+export default StarRating;

@@ -8,7 +8,7 @@ interface Props {
   onMenuToggle: () => void;
 }
 
-export default function Header({ searchQuery, onSearchChange, onMenuToggle }: Props) {
+const Header = React.memo(function Header({ searchQuery, onSearchChange, onMenuToggle }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -61,4 +61,6 @@ export default function Header({ searchQuery, onSearchChange, onMenuToggle }: Pr
       </div>
     </header>
   );
-}
+});
+
+export default Header;

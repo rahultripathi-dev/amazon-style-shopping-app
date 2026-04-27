@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFilterContext } from '../context/FilterContext';
 import { useProducts } from '../hooks/useProducts';
 import { fetchCategories } from '../api/products';
@@ -10,7 +10,7 @@ import type { Category, Filters } from '../types';
 
 export default function ProductListingPage() {
     const [showFilters, setShowFilters] = useState(true)
-  const { filters, setFilters, page, setPage, productIds, setProductIds, setTotalPages } = useFilterContext();
+  const { filters, setFilters, page, setPage, setProductIds } = useFilterContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,28 +30,28 @@ export default function ProductListingPage() {
     setProductIds(products.map(p => p.id));
   }, [products]);
 
-  useEffect(() => {
-    setTotalPages(totalPages);
-  }, [totalPages]);
-
-  function handleFilterChange(updated: Partial<Filters>) {
+  const handleFilterChange = useCallback((updated: Partial<Filters>) => {
     setFilters(prev => ({ ...prev, ...updated }));
     setPage(1);
-  }
+  }, [setFilters, setPage]);
 
-  function handleReset() {
+  const handleReset = useCallback(() => {
     setFilters({ category: '', brands: [], minPrice: '', maxPrice: '' });
     setPage(1);
     setSearchQuery('');
-  }
+  }, [setFilters, setPage]);
 
-  const visibleProducts = searchQuery.trim()
-    ? products.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
-    : products;
+  const handleMenuToggle = useCallback(() => setShowFilters(prev => !prev), []);
+
+  const visibleProducts = useMemo(() =>
+    searchQuery.trim()
+      ? products.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      : products,
+  [products, searchQuery]);
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
-      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onMenuToggle={() => setShowFilters(prev => !prev)}/>
+      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onMenuToggle={handleMenuToggle} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' }}>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>

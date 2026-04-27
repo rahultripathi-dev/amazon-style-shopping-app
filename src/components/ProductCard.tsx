@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
 import StarRating from './StarRating';
@@ -7,7 +7,7 @@ interface Props {
   product: Product;
 }
 
-export default function ProductCard({ product }: Props) {
+const ProductCard = React.memo(function ProductCard({ product }: Props) {
   const navigate = useNavigate();
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -49,4 +49,6 @@ export default function ProductCard({ product }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default ProductCard;
