@@ -38,7 +38,7 @@ const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, fil
   }
 
   return (
-    <aside className="w-55 shrink-0 flex flex-col gap-6 overflow-y-auto">
+    <aside className="w-55 shrink-0 flex flex-col gap-6 overflow-y-auto scrollbar-hide">
 
       <div className="relative">
         <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">🔍</span>
