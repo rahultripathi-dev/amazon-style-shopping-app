@@ -40,6 +40,8 @@ export default function ProductGrid({ products, loading, error }: Props) {
       gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
       gap: '16px',
       flex: 1,
+      minHeight: '580px',
+      alignContent: 'start',
     }}>
       {products.map(product => (
         <ProductCard key={product.id} product={product} />
@@ -54,7 +56,7 @@ const centerStyle: React.CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  minHeight: '300px',
+  minHeight: '580px',
 };
 
 const spinnerStyle: React.CSSProperties = {

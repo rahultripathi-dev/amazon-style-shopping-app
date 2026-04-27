@@ -3,14 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductById } from '../api/products';
 import { useFilterContext } from '../context/FilterContext';
 import Header from '../components/Header';
-import Pagination from '../components/Pagination';
 import StarRating from '../components/StarRating';
 import type { Product } from '../types';
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { page, setPage, totalPages } = useFilterContext();
+  const { productIds } = useFilterContext();
+  const currentIndex = productIds.indexOf(Number(id));
+  const prevId = currentIndex > 0 ? productIds[currentIndex - 1] : null;
+  const nextId = currentIndex < productIds.length - 1 ? productIds[currentIndex + 1] : null;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -100,11 +102,33 @@ export default function ProductDetailPage() {
               ))}
             </div>
 
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={(p) => { setPage(p); navigate('/'); }}
-            />
+            {productIds.length > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => prevId && navigate(`/product/${prevId}`, { replace: true })}
+                  disabled={!prevId}
+                  style={navBtnStyle(!prevId)}
+                >
+                  ← Prev
+                </button>
+                {productIds.map((pid, i) => (
+                  <button
+                    key={pid}
+                    onClick={() => navigate(`/product/${pid}`, { replace: true })}
+                    style={navBtnStyle(false, pid === Number(id))}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => nextId && navigate(`/product/${nextId}`, { replace: true })}
+                  disabled={!nextId}
+                  style={navBtnStyle(!nextId)}
+                >
+                  Next →
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Info */}
@@ -160,3 +184,14 @@ export default function ProductDetailPage() {
 const centerStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' };
 const spinnerStyle: React.CSSProperties = { width: '36px', height: '36px', border: '4px solid #e5e7eb', borderTop: '4px solid #2563eb', borderRadius: '50%', animation: 'spin 0.8s linear infinite' };
 const backBtnStyle: React.CSSProperties = { padding: '8px 16px', backgroundColor: '#fff', border: '1px solid #d1d5db', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 };
+const navBtnStyle = (disabled: boolean, active = false): React.CSSProperties => ({
+  padding: '6px 10px',
+  borderRadius: '6px',
+  border: '1px solid #e5e7eb',
+  backgroundColor: active ? '#2563eb' : '#fff',
+  color: active ? '#fff' : disabled ? '#9ca3af' : '#111827',
+  cursor: disabled ? 'not-allowed' : 'pointer',
+  fontWeight: active ? 600 : 400,
+  fontSize: '13px',
+  opacity: disabled ? 0.6 : 1,
+});
