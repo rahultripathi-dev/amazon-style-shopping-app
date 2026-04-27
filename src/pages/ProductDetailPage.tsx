@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductById } from '../api/products';
 import { useFilterContext } from '../context/FilterContext';
 import Header from '../components/Header';
 import StarRating from '../components/StarRating';
 import type { Product } from '../types';
+import styles from './ProductDetailPage.module.css';
 
 const noop = () => {};
 
@@ -46,44 +47,42 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
+      <div className={styles.page}>
         <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
-          <div className="shimmer" style={{ height: '36px', width: '80px', borderRadius: '6px' }} />
-          <div style={{ display: 'flex', gap: '40px', marginTop: '20px', backgroundColor: '#fff', borderRadius: '12px', padding: '32px', flexWrap: 'wrap' }}>
-            {/* Left column skeleton */}
-            <div style={{ flex: '0 0 360px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div className="shimmer" style={{ width: '100%', aspectRatio: '1', borderRadius: '8px' }} />
-              <div style={{ display: 'flex', gap: '8px' }}>
+        <div className={styles.container}>
+          <div className={`shimmer ${styles.skeletonBackBtn}`} />
+          <div className={styles.card}>
+            <div className={styles.skeletonLeft}>
+              <div className={`shimmer ${styles.skeletonImage}`} />
+              <div className={styles.skeletonThumbRow}>
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="shimmer" style={{ width: '60px', height: '60px', borderRadius: '6px', flexShrink: 0 }} />
+                  <div key={i} className={`shimmer ${styles.skeletonThumb}`} />
                 ))}
               </div>
             </div>
-            {/* Right column skeleton */}
-            <div style={{ flex: 1, minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div className="shimmer" style={{ height: '32px', width: '60%' }} />
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <div className="shimmer" style={{ height: '36px', width: '80px' }} />
-                <div className="shimmer" style={{ height: '20px', width: '120px' }} />
+            <div className={styles.skeletonRight}>
+              <div className="shimmer" style={{ height: '32px', width: '60%', borderRadius: '4px' }} />
+              <div className={styles.skeletonPriceRow}>
+                <div className="shimmer" style={{ height: '36px', width: '80px', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '20px', width: '120px', borderRadius: '4px' }} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div className="shimmer" style={{ height: '14px', width: '40%' }} />
-                <div className="shimmer" style={{ height: '14px', width: '35%' }} />
-                <div className="shimmer" style={{ height: '14px', width: '30%' }} />
+              <div className={styles.skeletonMetaLines}>
+                <div className="shimmer" style={{ height: '14px', width: '40%', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '14px', width: '35%', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '14px', width: '30%', borderRadius: '4px' }} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div className="shimmer" style={{ height: '18px', width: '30%' }} />
-                <div className="shimmer" style={{ height: '14px', width: '100%' }} />
-                <div className="shimmer" style={{ height: '14px', width: '90%' }} />
-                <div className="shimmer" style={{ height: '14px', width: '80%' }} />
+              <div className={styles.skeletonSection}>
+                <div className="shimmer" style={{ height: '18px', width: '30%', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '14px', width: '100%', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '14px', width: '90%', borderRadius: '4px' }} />
+                <div className="shimmer" style={{ height: '14px', width: '80%', borderRadius: '4px' }} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div className="shimmer" style={{ height: '18px', width: '25%' }} />
+              <div className={styles.skeletonReviews}>
+                <div className="shimmer" style={{ height: '18px', width: '25%', borderRadius: '4px' }} />
                 {Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} style={{ padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div className="shimmer" style={{ height: '14px', width: '40%' }} />
-                    <div className="shimmer" style={{ height: '12px', width: '90%' }} />
+                  <div key={i} className={styles.skeletonReviewCard}>
+                    <div className="shimmer" style={{ height: '14px', width: '40%', borderRadius: '4px' }} />
+                    <div className="shimmer" style={{ height: '12px', width: '90%', borderRadius: '4px' }} />
                   </div>
                 ))}
               </div>
@@ -96,62 +95,55 @@ export default function ProductDetailPage() {
 
   if (error || !product) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
+      <div className={styles.page}>
         <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' }}>
-          <p style={{ color: '#dc2626', fontWeight: 600 }}>{error ?? 'Product not found.'}</p>
-          <button onClick={() => navigate('/')} style={backBtnStyle}>← Back to Products</button>
+        <div className={styles.errorWrap}>
+          <p className={styles.errorText}>{error ?? 'Product not found.'}</p>
+          <button onClick={() => navigate('/')} className={styles.backBtn}>← Back to Products</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
+    <div className={styles.page}>
       <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
-        <button onClick={() => navigate('/')} style={backBtnStyle}>← Back</button>
+      <div className={styles.container}>
+        <button onClick={() => navigate('/')} className={styles.backBtn}>← Back</button>
 
-        <div style={{ display: 'flex', gap: '40px', marginTop: '20px', backgroundColor: '#fff', borderRadius: '12px', padding: '32px', flexWrap: 'wrap' }}>
+        <div className={styles.card}>
 
           {/* Images */}
-          <div style={{ flex: '0 0 360px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ width: '100%', aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', position: 'relative' }}>
+          <div className={styles.imageCol}>
+            <div className={styles.mainImageWrap}>
               {!imgLoaded && <div className="shimmer" style={{ position: 'absolute', inset: 0 }} />}
               <img
                 src={selectedImage}
                 alt={product.title}
                 onLoad={() => setImgLoaded(true)}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
+                className={`${styles.mainImage} ${imgLoaded ? styles.mainImageLoaded : ''}`}
               />
             </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+
+            <div className={styles.thumbRow}>
               {product.images.map((img, i) => (
                 <img
                   key={i}
                   src={img}
                   alt={`${product.title} ${i + 1}`}
                   onClick={() => setSelectedImage(img)}
-                  style={{
-                    width: '60px',
-                    height: '60px',
-                    objectFit: 'contain',
-                    borderRadius: '6px',
-                    border: selectedImage === img ? '2px solid #2563eb' : '1px solid #e5e7eb',
-                    cursor: 'pointer',
-                    backgroundColor: '#f9fafb',
-                  }}
+                  className={`${styles.thumb} ${selectedImage === img ? styles.thumbActive : ''}`}
                 />
               ))}
             </div>
 
             {productIds.length > 0 && (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <div className={styles.navRow}>
                 <button
                   onClick={() => prevId && navigate(`/product/${prevId}`, { replace: true })}
                   disabled={!prevId}
-                  style={navBtnStyle(!prevId)}
+                  className={styles.navBtn}
                 >
                   ← Prev
                 </button>
@@ -159,7 +151,7 @@ export default function ProductDetailPage() {
                   <button
                     key={pid}
                     onClick={() => navigate(`/product/${pid}`, { replace: true })}
-                    style={navBtnStyle(false, pid === Number(id))}
+                    className={`${styles.navBtn} ${pid === Number(id) ? styles.navBtnActive : ''}`}
                   >
                     {i + 1}
                   </button>
@@ -167,7 +159,7 @@ export default function ProductDetailPage() {
                 <button
                   onClick={() => nextId && navigate(`/product/${nextId}`, { replace: true })}
                   disabled={!nextId}
-                  style={navBtnStyle(!nextId)}
+                  className={styles.navBtn}
                 >
                   Next →
                 </button>
@@ -176,41 +168,41 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Info */}
-          <div style={{ flex: 1, minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: '#111827' }}>{product.title}</h1>
+          <div className={styles.infoCol}>
+            <h1 className={styles.productTitle}>{product.title}</h1>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '28px', fontWeight: 700, color: '#111827' }}>${product.price.toFixed(2)}</span>
+            <div className={styles.priceRow}>
+              <span className={styles.price}>${product.price.toFixed(2)}</span>
               <StarRating rating={product.rating} count={product.rating} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px', color: '#374151' }}>
+            <div className={styles.metaList}>
               <span><strong>Brand:</strong> {product.brand}</span>
               <span><strong>Category:</strong> {product.category}</span>
               <span><strong>Stock:</strong> {product.stock} units</span>
               {product.discountPercentage > 0 && (
-                <span style={{ color: '#16a34a' }}>
+                <span className={styles.discount}>
                   <strong>Discount:</strong> {product.discountPercentage.toFixed(1)}% off
                 </span>
               )}
             </div>
 
             <div>
-              <h2 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0' }}>Description</h2>
-              <p style={{ margin: 0, fontSize: '14px', color: '#4b5563', lineHeight: '1.6' }}>{product.description}</p>
+              <h2 className={styles.sectionTitle}>Description</h2>
+              <p className={styles.description}>{product.description}</p>
             </div>
 
             {product.reviews?.length > 0 && (
               <div>
-                <h2 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 12px 0' }}>Reviews</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <h2 className={styles.reviewsTitle}>Reviews</h2>
+                <div className={styles.reviewList}>
                   {product.reviews.map((review, i) => (
-                    <div key={i} style={{ padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                        <strong style={{ fontSize: '14px' }}>{review.reviewerName}</strong>
+                    <div key={i} className={styles.reviewCard}>
+                      <div className={styles.reviewHeader}>
+                        <strong className={styles.reviewerName}>{review.reviewerName}</strong>
                         <StarRating rating={review.rating} />
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px', color: '#4b5563' }}>{review.comment}</p>
+                      <p className={styles.reviewComment}>{review.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -218,22 +210,7 @@ export default function ProductDetailPage() {
             )}
           </div>
         </div>
-
-
       </div>
     </div>
   );
 }
-
-const backBtnStyle: React.CSSProperties = { padding: '8px 16px', backgroundColor: '#fff', border: '1px solid #d1d5db', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 };
-const navBtnStyle = (disabled: boolean, active = false): React.CSSProperties => ({
-  padding: '6px 10px',
-  borderRadius: '6px',
-  border: '1px solid #e5e7eb',
-  backgroundColor: active ? '#2563eb' : '#fff',
-  color: active ? '#fff' : disabled ? '#9ca3af' : '#111827',
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  fontWeight: active ? 600 : 400,
-  fontSize: '13px',
-  opacity: disabled ? 0.6 : 1,
-});

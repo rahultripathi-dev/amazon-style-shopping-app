@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Category, Filters } from '../types';
+import styles from './FilterPanel.module.css';
 
 interface Props {
   categories: Category[];
@@ -36,34 +37,34 @@ const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, fil
   }
 
   return (
-    <aside style={{ width: '220px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <aside className={styles.panel}>
 
-      <div style={{ position: 'relative' }}>
-        <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', fontSize: '14px' }}>🔍</span>
+      <div className={styles.searchWrap}>
+        <span className={styles.searchIcon}>🔍</span>
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={e => onSearchChange(e.target.value)}
-          style={{ ...inputStyle, paddingLeft: '32px', width: '100%' }}
+          className={styles.searchInput}
         />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontWeight: 700, fontSize: '16px' }}>Filters</span>
-        <button onClick={onReset} style={linkBtnStyle}>Reset all</button>
+      <div className={styles.filterHeader}>
+        <span className={styles.filterTitle}>Filters</span>
+        <button onClick={onReset} className={styles.resetBtn}>Reset all</button>
       </div>
 
       {/* Categories */}
       <section>
-        <p style={sectionHeadStyle}>Category</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <p className={styles.sectionHead}>Category</p>
+        <div className={styles.list}>
           {categoriesLoading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="shimmer" style={{ height: '16px', width: `${60 + (i % 3) * 15}%`, borderRadius: '4px' }} />
+                <div key={i} className={`shimmer ${styles.shimmerLine}`} />
               ))
             : categories.map(cat => (
-                <label key={cat.slug} style={labelStyle}>
+                <label key={cat.slug} className={styles.label}>
                   <input
                     type="checkbox"
                     checked={filters.category === cat.slug}
@@ -78,15 +79,15 @@ const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, fil
 
       {/* Price Range */}
       <section>
-        <p style={sectionHeadStyle}>Price Range</p>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <p className={styles.sectionHead}>Price Range</p>
+        <div className={styles.priceRow}>
           <input
             type="number"
             placeholder="Min"
             value={minInput}
             onChange={e => setMinInput(e.target.value)}
             onKeyDown={handlePriceKeyDown}
-            style={inputStyle}
+            className={styles.input}
           />
           <input
             type="number"
@@ -94,19 +95,19 @@ const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, fil
             value={maxInput}
             onChange={e => setMaxInput(e.target.value)}
             onKeyDown={handlePriceKeyDown}
-            style={inputStyle}
+            className={styles.input}
           />
         </div>
-        <button onClick={handlePriceApply} style={applyBtnStyle}>Apply</button>
+        <button onClick={handlePriceApply} className={styles.applyBtn}>Apply</button>
       </section>
 
       {/* Brands */}
       {allBrands.length > 0 && (
         <section>
-          <p style={sectionHeadStyle}>Brand</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
+          <p className={styles.sectionHead}>Brand</p>
+          <div className={styles.brandList}>
             {allBrands.map(brand => (
-              <label key={brand} style={labelStyle}>
+              <label key={brand} className={styles.label}>
                 <input
                   type="checkbox"
                   checked={filters.brands.includes(brand)}
@@ -124,9 +125,3 @@ const FilterPanel = React.memo(function FilterPanel({ categories, allBrands, fil
 });
 
 export default FilterPanel;
-
-const sectionHeadStyle: React.CSSProperties = { margin: '0 0 10px 0', fontWeight: 600, fontSize: '14px', color: '#374151' };
-const labelStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer', color: '#374151' };
-const inputStyle: React.CSSProperties = { width: '100%', padding: '6px 8px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px' };
-const applyBtnStyle: React.CSSProperties = { width: '100%', padding: '7px', backgroundColor: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, fontSize: '14px' };
-const linkBtnStyle: React.CSSProperties = { background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '13px', padding: 0 };

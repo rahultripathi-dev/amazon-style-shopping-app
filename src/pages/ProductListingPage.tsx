@@ -7,9 +7,10 @@ import ProductGrid from '../components/ProductGrid';
 import Pagination from '../components/Pagination';
 import Header from '../components/Header';
 import type { Category, Filters } from '../types';
+import styles from './ProductListingPage.module.css';
 
 export default function ProductListingPage() {
-    const [showFilters, setShowFilters] = useState(true)
+  const [showFilters, setShowFilters] = useState(true);
   const { filters, setFilters, page, setPage, setProductIds } = useFilterContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -50,38 +51,28 @@ export default function ProductListingPage() {
   [products, searchQuery]);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
+    <div className={styles.page}>
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onMenuToggle={handleMenuToggle} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' }}>
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
-        {showFilters && (
-          <FilterPanel
-            categories={categories}
-            allBrands={allBrands}
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onReset={handleReset}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            categoriesLoading={categoriesLoading}
-          />
-        )}
+      <div className={styles.container}>
+        <div className={styles.layout}>
+          {showFilters && (
+            <FilterPanel
+              categories={categories}
+              allBrands={allBrands}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onReset={handleReset}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              categoriesLoading={categoriesLoading}
+            />
+          )}
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <p style={{ margin: '0 0 12px 0', fontWeight: 700, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              🔍 Filters
-            </p>
-            <ProductGrid
-              products={visibleProducts}
-              loading={loading}
-              error={error}
-            />
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-            />
+          <div className={styles.main}>
+            <p className={styles.sectionTitle}>🔍 Filters</p>
+            <ProductGrid products={visibleProducts} loading={loading} error={error} />
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         </div>
       </div>
