@@ -6,6 +6,8 @@ import Header from '../components/Header';
 import StarRating from '../components/StarRating';
 import type { Product } from '../types';
 
+const noop = () => {};
+
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
-        <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
+        <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
         <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
           <div className="shimmer" style={{ height: '36px', width: '80px', borderRadius: '6px' }} />
           <div style={{ display: 'flex', gap: '40px', marginTop: '20px', backgroundColor: '#fff', borderRadius: '12px', padding: '32px', flexWrap: 'wrap' }}>
@@ -95,7 +97,7 @@ export default function ProductDetailPage() {
   if (error || !product) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
-        <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
+        <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' }}>
           <p style={{ color: '#dc2626', fontWeight: 600 }}>{error ?? 'Product not found.'}</p>
           <button onClick={() => navigate('/')} style={backBtnStyle}>← Back to Products</button>
@@ -106,7 +108,7 @@ export default function ProductDetailPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
-      <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
+      <Header searchQuery="" onSearchChange={noop} onMenuToggle={noop} />
 
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
         <button onClick={() => navigate('/')} style={backBtnStyle}>← Back</button>
