@@ -8,6 +8,8 @@ interface FilterContextType {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   productIds: number[];
   setProductIds: (ids: number[]) => void;
+  totalPages: number;
+  setTotalPages: (n: number) => void;
 }
 
 const defaultFilters: Filters = {
@@ -23,9 +25,10 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [page, setPage] = useState(1);
   const [productIds, setProductIds] = useState<number[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   return (
-    <FilterContext.Provider value={{ filters, setFilters, page, setPage, productIds, setProductIds }}>
+    <FilterContext.Provider value={{ filters, setFilters, page, setPage, productIds, setProductIds, totalPages, setTotalPages }}>
       {children}
     </FilterContext.Provider>
   );

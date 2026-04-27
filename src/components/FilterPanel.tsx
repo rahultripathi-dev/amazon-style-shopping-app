@@ -7,9 +7,11 @@ interface Props {
   filters: Filters;
   onFilterChange: (updated: Partial<Filters>) => void;
   onReset: () => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }
 
-export default function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset }: Props) {
+export default function FilterPanel({ categories, allBrands, filters, onFilterChange, onReset, searchQuery, onSearchChange }: Props) {
   const [minInput, setMinInput] = useState(filters.minPrice);
   const [maxInput, setMaxInput] = useState(filters.maxPrice);
 
@@ -34,6 +36,17 @@ export default function FilterPanel({ categories, allBrands, filters, onFilterCh
 
   return (
     <aside style={{ width: '220px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+
+      <div style={{ position: 'relative' }}>
+        <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', fontSize: '14px' }}>🔍</span>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={e => onSearchChange(e.target.value)}
+          style={{ ...inputStyle, paddingLeft: '32px', width: '100%' }}
+        />
+      </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontWeight: 700, fontSize: '16px' }}>Filters</span>

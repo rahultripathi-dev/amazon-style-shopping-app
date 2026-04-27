@@ -3,21 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductById } from '../api/products';
 import { useFilterContext } from '../context/FilterContext';
 import Header from '../components/Header';
-import type { Product } from '../types';
+import Pagination from '../components/Pagination';
 import StarRating from '../components/StarRating';
+import type { Product } from '../types';
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { productIds } = useFilterContext();
+  const { page, setPage, totalPages } = useFilterContext();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>('');
-
-  const currentIndex = productIds.indexOf(Number(id));
-  const prevId = currentIndex > 0 ? productIds[currentIndex - 1] : null;
-  const nextId = currentIndex < productIds.length - 1 ? productIds[currentIndex + 1] : null;
 
   useEffect(() => {
     if (!id) return;
@@ -70,7 +67,7 @@ export default function ProductDetailPage() {
       <Header searchQuery="" onSearchChange={() => {}} onMenuToggle={() => {}} />
 
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px' }}>
-        <button onClick={() => navigate(-1)} style={backBtnStyle}>← Back</button>
+        <button onClick={() => navigate('/')} style={backBtnStyle}>← Back</button>
 
         <div style={{ display: 'flex', gap: '40px', marginTop: '20px', backgroundColor: '#fff', borderRadius: '12px', padding: '32px', flexWrap: 'wrap' }}>
 
@@ -102,6 +99,12 @@ export default function ProductDetailPage() {
                 />
               ))}
             </div>
+
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(p) => { setPage(p); navigate('/'); }}
+            />
           </div>
 
           {/* Info */}
@@ -148,30 +151,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Product Navigation */}
-        {productIds.length > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', backgroundColor: '#fff', borderRadius: '12px', padding: '16px 24px', border: '1px solid #e5e7eb' }}>
-            <button
-             onClick={() => prevId && navigate(`/product/${prevId}`, { replace: true })}
-              disabled={!prevId}
-              style={navBtnStyle(!prevId)}
-            >
-              ← Previous Product
-            </button>
-
-            <span style={{ fontSize: '13px', color: '#6b7280' }}>
-              {currentIndex + 1} of {productIds.length}
-            </span>
-
-            <button
-              onClick={() => nextId && navigate(`/product/${nextId}`, { replace: true })}
-              disabled={!nextId}
-              style={navBtnStyle(!nextId)}
-            >
-              Next Product →
-            </button>
-          </div>
-        )}
 
       </div>
     </div>
@@ -181,14 +160,3 @@ export default function ProductDetailPage() {
 const centerStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' };
 const spinnerStyle: React.CSSProperties = { width: '36px', height: '36px', border: '4px solid #e5e7eb', borderTop: '4px solid #2563eb', borderRadius: '50%', animation: 'spin 0.8s linear infinite' };
 const backBtnStyle: React.CSSProperties = { padding: '8px 16px', backgroundColor: '#fff', border: '1px solid #d1d5db', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 };
-const navBtnStyle = (disabled: boolean): React.CSSProperties => ({
-  padding: '8px 16px',
-  backgroundColor: disabled ? '#f3f4f6' : '#fff',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  fontSize: '14px',
-  fontWeight: 500,
-  color: disabled ? '#9ca3af' : '#111827',
-  opacity: disabled ? 0.6 : 1,
-});

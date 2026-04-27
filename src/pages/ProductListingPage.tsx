@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFilterContext } from '../context/FilterContext';
 import { useProducts } from '../hooks/useProducts';
 import { fetchCategories } from '../api/products';
@@ -10,7 +10,7 @@ import type { Category, Filters } from '../types';
 
 export default function ProductListingPage() {
     const [showFilters, setShowFilters] = useState(true)
-  const { filters, setFilters, page, setPage, productIds, setProductIds } = useFilterContext();
+  const { filters, setFilters, page, setPage, productIds, setProductIds, setTotalPages } = useFilterContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const { products, totalPages, loading, error, allBrands } = useProducts(filters, page);
@@ -20,12 +20,16 @@ export default function ProductListingPage() {
     fetchCategories(controller.signal)
       .then(setCategories)
       .catch(() => {});
-
     return () => controller.abort();
   }, []);
+
   useEffect(() => {
-    setProductIds(products.map(p => p.id))
-  }, [products])
+    setProductIds(products.map(p => p.id));
+  }, [products]);
+
+  useEffect(() => {
+    setTotalPages(totalPages);
+  }, [totalPages]);
 
   function handleFilterChange(updated: Partial<Filters>) {
     setFilters(prev => ({ ...prev, ...updated }));
@@ -48,15 +52,22 @@ export default function ProductListingPage() {
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' }}>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
-        { showFilters && <FilterPanel
+        {showFilters && (
+          <FilterPanel
             categories={categories}
             allBrands={allBrands}
             filters={filters}
             onFilterChange={handleFilterChange}
             onReset={handleReset}
-          />}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        )}
 
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <p style={{ margin: '0 0 12px 0', fontWeight: 700, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              🔍 Filters
+            </p>
             <ProductGrid
               products={visibleProducts}
               loading={loading}
