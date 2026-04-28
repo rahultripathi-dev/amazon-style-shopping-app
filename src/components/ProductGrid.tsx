@@ -14,7 +14,7 @@ const ProductGrid = React.memo(function ProductGrid({ products, loading, error }
       <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 flex-1 min-h-0 content-start overflow-hidden">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="border border-gray-200 rounded-lg p-3 bg-white flex flex-col gap-2.5">
-            <div className="shimmer w-full aspect-square rounded-md" />
+            <div className="shimmer w-full h-36 rounded-md" />
             <div className="shimmer h-3.5 rounded w-4/5" />
             <div className="shimmer h-3.5 rounded w-1/2" />
           </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFilterContext } from '../context/FilterContext';
 import { useProducts } from '../hooks/useProducts';
 import { fetchCategories } from '../api/products';
@@ -54,7 +54,7 @@ export default function ProductListingPage() {
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} onMenuToggle={handleMenuToggle} />
 
       <div className="flex-1 overflow-hidden">
-        <div className="max-w-300 mx-auto h-full px-4 py-6 flex flex-col">
+        <div className="max-w-300 mx-auto h-full px-4 py-4 flex flex-col">
           <div className="flex gap-6 flex-1 min-h-0">
             {showFilters && (
               <FilterPanel

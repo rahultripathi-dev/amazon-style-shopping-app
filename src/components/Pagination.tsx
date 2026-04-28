@@ -23,7 +23,7 @@ const Pagination = React.memo(function Pagination({ currentPage, totalPages, onP
   const pages = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div className="flex justify-center items-center gap-1.5 py-6 mt-12">
+    <div className="flex justify-center items-center gap-1.5 py-3 mt-3">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}

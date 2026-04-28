@@ -16,7 +16,7 @@ const ProductCard = React.memo(function ProductCard({ product }: Props) {
       className="border border-gray-200 rounded-lg p-3 cursor-pointer bg-white transition-shadow duration-200 flex flex-col gap-2 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
       onClick={() => navigate(`/product/${product.id}`)}
     >
-      <div className="w-full aspect-square overflow-hidden rounded-md bg-gray-50 relative">
+      <div className="w-full h-36 overflow-hidden rounded-md bg-gray-50 relative">
         {!imgLoaded && <div className="shimmer" style={{ position: 'absolute', inset: 0, borderRadius: '6px' }} />}
         <img
           src={product.thumbnail}
